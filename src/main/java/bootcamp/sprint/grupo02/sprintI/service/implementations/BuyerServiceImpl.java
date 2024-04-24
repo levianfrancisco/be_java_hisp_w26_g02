@@ -36,16 +36,16 @@ public class BuyerServiceImpl implements BuyerService {
                 .toList();
 
         UserResponseDTO buyer = new UserResponseDTO(founded.getId(), founded.getName());
+        return new FollowedListResponseDTO(buyer, followedSellers);
+    }
 
+    @Override
     public List<Seller> getAllSellers(int buyerId){
         Optional<Buyer> buyer = repository.findById(buyerId);
         if(!buyer.isPresent()){
             throw new NotFoundException("Buyer not found");
         }
         return buyer.get().getFollows();
-    }
-
-        return new FollowedListResponseDTO(buyer, followedSellers);
     }
 
     @Override
