@@ -36,7 +36,14 @@ public class PostServiceImpl implements PostService {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public List<PostResponseDTO> getAllBySellerId(int seller) {
+    public List<PostResponseDTO> getAllBySellerId(int seller, String order) {
+        if(order.equals("date_asc")) {
+            return repository.findBySellerId(seller)
+                    .stream()
+                    .map(this::convertToPostResponseDTO)
+                    .sorted(Comparator.comparing(PostResponseDTO::getDate))
+                    .toList();
+        }
         return repository.findBySellerId(seller)
                 .stream()
                 .map(this::convertToPostResponseDTO)
@@ -45,21 +52,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDTO> getBySellerIdLastTwoWeeks(int sellerId) {
-        return getAllBySellerId(sellerId)
+    public List<PostResponseDTO> getBySellerIdLastTwoWeeks(int sellerId, String order) {
+        return getAllBySellerId(sellerId, order)
                 .stream()
                 .filter(p -> p.getDate().isAfter(LocalDate.now().minusDays(14L)))
                 .toList();
     }
 
     @Override
-    public PostListByBuyerResponseDTO findPostsByBuyer(int id) {
+    public PostListByBuyerResponseDTO findPostsByBuyer(int id, String order) {
         List<Seller> sellers = buyerService.getAllSellers(id);
         PostListByBuyerResponseDTO postListByBuyerResponseDTO = new PostListByBuyerResponseDTO();
         postListByBuyerResponseDTO.setUserId(id);
         List<PostResponseDTO> postList = new ArrayList<>();
         for(Seller seller : sellers){
-            postList.addAll(getBySellerIdLastTwoWeeks(seller.getId()));
+            postList.addAll(getBySellerIdLastTwoWeeks(seller.getId(), order));
             postListByBuyerResponseDTO.setPosts(postList);
         }
         return postListByBuyerResponseDTO;
