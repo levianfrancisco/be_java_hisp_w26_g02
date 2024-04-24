@@ -17,8 +17,8 @@ public class SellerRepositoryImpl implements SellerRepository {
 
     public SellerRepositoryImpl() {
         this.sellers = new ArrayList<>();
-        Seller seller1 = new Seller(1, "Un Vendedor", null);
-        Seller seller2 = new Seller(2, "Un Vendedor 2", null);
+        Seller seller1 = new Seller(1, "Un Vendedor");
+        Seller seller2 = new Seller(2, "Un Vendedor 2");
         Buyer buyer = new Buyer(1, "Seguidor", null);
         seller1.setFollowers(List.of(buyer));
         this.sellers.add(seller1);
@@ -33,8 +33,10 @@ public class SellerRepositoryImpl implements SellerRepository {
 
     @Override
     public Optional<Seller> findById(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return sellers
+                .stream()
+                .filter(seller -> seller.getId() == id)
+                .findFirst();
     }
 
     @Override
