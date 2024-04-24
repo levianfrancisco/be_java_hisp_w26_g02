@@ -22,7 +22,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public List<Product> findAll() {
-        return null;
+        return products;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void add(Product entity) {
-
+        products.add(entity);
     }
 
     @Override

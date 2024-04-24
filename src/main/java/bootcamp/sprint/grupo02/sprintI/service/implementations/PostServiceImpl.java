@@ -1,14 +1,17 @@
 package bootcamp.sprint.grupo02.sprintI.service.implementations;
 
+import bootcamp.sprint.grupo02.sprintI.dto.response.MessageResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.PostListByBuyerResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.PostResponseDTO;
-import bootcamp.sprint.grupo02.sprintI.model.Buyer;
 import bootcamp.sprint.grupo02.sprintI.model.Post;
 import bootcamp.sprint.grupo02.sprintI.model.Seller;
 import bootcamp.sprint.grupo02.sprintI.service.BuyerService;
 import bootcamp.sprint.grupo02.sprintI.service.ProductService;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import bootcamp.sprint.grupo02.sprintI.dto.request.PostDTO;
+import bootcamp.sprint.grupo02.sprintI.dto.request.ProductDTO;
+import bootcamp.sprint.grupo02.sprintI.model.Product;
+import bootcamp.sprint.grupo02.sprintI.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import bootcamp.sprint.grupo02.sprintI.repository.PostRepository;
@@ -19,6 +22,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -71,4 +77,36 @@ public class PostServiceImpl implements PostService {
     }
 
 
+    private final ProductRepository productRepository;
+
+
+
+    @Override
+    public MessageResponseDTO createPost(PostDTO dto) {
+
+            Post post = parsePostDtoToModelWithOutDiscount(dto);
+            repository.add(post);
+            productService.addProduct(dto.getProduct());
+            return new MessageResponseDTO("Ok");
+    }
+
+
+    /////////////////////METODOS PRIVADOS/////////////////////
+    private Post parsePostDtoToModelWithOutDiscount(PostDTO dto){
+        ProductDTO proDto = dto.getProduct();
+
+        Product product = new Product(proDto.getProductId(),proDto.getProductName(),proDto.getType(),proDto.getColor(),
+                proDto.getNotes(),proDto.getBrand());
+
+        Post post = new Post(repository.findAll().size() + 1,dto.getUserId(),dateFormater(dto.getDate()),dto.getCategory(),dto.getPrice(),
+                product, 1,false);
+
+        return post;
+
+    }
+    private LocalDate dateFormater(String str){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse(str, formatter);
+        return date;
+    }
 }
