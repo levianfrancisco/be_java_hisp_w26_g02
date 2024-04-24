@@ -6,6 +6,7 @@ import bootcamp.sprint.grupo02.sprintI.dto.response.SellerFollowersResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,10 +19,15 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-
+    
     private final BuyerService buyerService;
     private final SellerService sellerService;
 
+    @PostMapping("/{userId}/follow/{userIdToFollow}")
+    public ResponseEntity<?> postFollowUser(@PathVariable int userId, @PathVariable int userIdToFollow) {
+        buyerService.followUser(userId, userIdToFollow);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/{userId}/followers/list")
     public ResponseEntity<FollowersListResponseDTO> getFollowersList(@PathVariable int userId){

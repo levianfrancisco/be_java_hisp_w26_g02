@@ -20,7 +20,7 @@ public class SellerRepositoryImpl implements SellerRepository {
         Seller seller1 = new Seller(1, "Un Vendedor");
         Seller seller2 = new Seller(2, "Un Vendedor 2");
         Buyer buyer = new Buyer(1, "Seguidor", null);
-        seller1.setFollowers(List.of(buyer));
+        seller1.setFollowers(new ArrayList<>(List.of(buyer)));
         this.sellers.add(seller1);
         this.sellers.add(seller2);
     }

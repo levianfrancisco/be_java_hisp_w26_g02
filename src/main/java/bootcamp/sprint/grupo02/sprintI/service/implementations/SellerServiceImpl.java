@@ -1,11 +1,10 @@
 package bootcamp.sprint.grupo02.sprintI.service.implementations;
 
+import bootcamp.sprint.grupo02.sprintI.exception.NotFoundException;
+import bootcamp.sprint.grupo02.sprintI.model.Seller;
 import bootcamp.sprint.grupo02.sprintI.dto.response.FollowersListResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.SellerFollowersResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.UserResponseDTO;
-import bootcamp.sprint.grupo02.sprintI.exception.NotFoundException;
-import bootcamp.sprint.grupo02.sprintI.model.Buyer;
-import bootcamp.sprint.grupo02.sprintI.model.Seller;
 import org.springframework.stereotype.Service;
 
 import bootcamp.sprint.grupo02.sprintI.repository.SellerRepository;
@@ -20,9 +19,14 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SellerServiceImpl implements SellerService {
-
+    
     private final SellerRepository repository;
 
+    @Override
+    public Seller findById(int id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Seller not found: " + id));
+    }
     @Override
     public FollowersListResponseDTO getFollowersList(int id) {
         Optional<Seller> result = repository.findById(id);
