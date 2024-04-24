@@ -387,6 +387,9 @@
 
 ## Diagrama de clases planteado por el equipo
 
+![Alt Text](./diagramaDeClases.png)
+
+
 ## Convenciones 
 
 - Programar en ingles.
