@@ -1,5 +1,6 @@
 package bootcamp.sprint.grupo02.sprintI.dto.response;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
