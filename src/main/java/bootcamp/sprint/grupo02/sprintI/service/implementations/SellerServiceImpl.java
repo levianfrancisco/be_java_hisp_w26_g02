@@ -5,13 +5,15 @@ import bootcamp.sprint.grupo02.sprintI.model.Seller;
 import bootcamp.sprint.grupo02.sprintI.dto.response.FollowersListResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.SellerFollowersResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.UserResponseDTO;
+import bootcamp.sprint.grupo02.sprintI.enums.AlfabeticOrder;
+
 import org.springframework.stereotype.Service;
 
 import bootcamp.sprint.grupo02.sprintI.repository.SellerRepository;
 import bootcamp.sprint.grupo02.sprintI.service.SellerService;
 import lombok.RequiredArgsConstructor;
 
-
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class SellerServiceImpl implements SellerService {
     
     private final SellerRepository repository;
+
 
     @Override
     public Seller findById(int id) {
@@ -62,4 +65,22 @@ public class SellerServiceImpl implements SellerService {
         return responseDTO;
 
     }
+
+  @Override
+  public FollowersListResponseDTO getFollowersList(int id, String order) {
+        FollowersListResponseDTO result = getFollowersList(id);
+        this.orderResult(result.getFollowers(), order);
+        return result;
+
+  }
+
+  private void orderResult(List<UserResponseDTO> toOrder, String order){
+        Comparator<UserResponseDTO> comparator = Comparator.comparing(UserResponseDTO::getUserName);
+        if(order.equalsIgnoreCase(AlfabeticOrder.NAME_DESC.toString())) {
+               comparator = comparator.reversed();
+        }
+        toOrder.sort(comparator);
+  }
+
+
 }

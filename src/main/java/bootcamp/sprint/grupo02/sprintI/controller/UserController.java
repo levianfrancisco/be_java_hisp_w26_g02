@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import bootcamp.sprint.grupo02.sprintI.dto.response.FollowedListResponseDTO;
@@ -36,6 +37,13 @@ public class UserController {
         );
     }
 
+    @GetMapping(value = "/{userId}/followers/list", params = "order" )
+    public ResponseEntity<FollowersListResponseDTO> getFollowersList(@PathVariable int userId, @RequestParam String order){
+        return ResponseEntity.status(HttpStatus.OK).body(
+          sellerService.getFollowersList(userId, order)
+        );
+    }
+
     @GetMapping("/{userId}/followers/count")
     public ResponseEntity<SellerFollowersResponseDTO> getSellerWithNumberOfFollowers(@PathVariable int userId){
         return ResponseEntity.ok(this.sellerService.calculateFollowersCount(userId));
@@ -45,6 +53,11 @@ public class UserController {
     @GetMapping("/{userId}/followed/list")
     public ResponseEntity<FollowedListResponseDTO> getSellersFollowed(@PathVariable int userId) {
         return ResponseEntity.ok(buyerService.searchBuyerFollows(userId));
+    }
+
+    @GetMapping(value = "/{userId}/followed/list", params = "order")
+    public ResponseEntity<FollowedListResponseDTO> getSellersFollowed(@PathVariable int userId, @RequestParam String order) {
+        return ResponseEntity.ok(buyerService.searchBuyerFollows(userId, order));
     }
 
 }
