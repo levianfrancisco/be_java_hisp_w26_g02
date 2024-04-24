@@ -14,12 +14,13 @@ import bootcamp.sprint.grupo02.sprintI.service.BuyerService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 public class BuyerServiceImpl implements BuyerService {
-
+    
     private final BuyerRepository repository;
     private final SellerService sellerService;
 
@@ -35,6 +36,14 @@ public class BuyerServiceImpl implements BuyerService {
                 .toList();
 
         UserResponseDTO buyer = new UserResponseDTO(founded.getId(), founded.getName());
+
+    public List<Seller> getAllSellers(int buyerId){
+        Optional<Buyer> buyer = repository.findById(buyerId);
+        if(!buyer.isPresent()){
+            throw new NotFoundException("Buyer not found");
+        }
+        return buyer.get().getFollows();
+    }
 
         return new FollowedListResponseDTO(buyer, followedSellers);
     }
