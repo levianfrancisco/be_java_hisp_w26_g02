@@ -3,6 +3,7 @@ package bootcamp.sprint.grupo02.sprintI.service.implementations;
 import bootcamp.sprint.grupo02.sprintI.dto.response.MessageResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.PostListByBuyerResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.PostResponseDTO;
+import bootcamp.sprint.grupo02.sprintI.exception.BadRequestException;
 import bootcamp.sprint.grupo02.sprintI.model.Post;
 import bootcamp.sprint.grupo02.sprintI.model.Seller;
 import bootcamp.sprint.grupo02.sprintI.service.BuyerService;
@@ -43,12 +44,14 @@ public class PostServiceImpl implements PostService {
                     .map(this::convertToPostResponseDTO)
                     .sorted(Comparator.comparing(PostResponseDTO::getDate))
                     .toList();
+        } if(order.equals("date_desc")) {
+            return repository.findBySellerId(seller)
+                    .stream()
+                    .map(this::convertToPostResponseDTO)
+                    .sorted(Comparator.comparing(PostResponseDTO::getDate).reversed())
+                    .toList();
         }
-        return repository.findBySellerId(seller)
-                .stream()
-                .map(this::convertToPostResponseDTO)
-                .sorted(Comparator.comparing(PostResponseDTO::getDate).reversed())
-                .toList();
+        throw new BadRequestException("Invalid order");
     }
 
     @Override
