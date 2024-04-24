@@ -3,6 +3,7 @@ package bootcamp.sprint.grupo02.sprintI.service.implementations;
 import bootcamp.sprint.grupo02.sprintI.dto.response.MessageResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.PostListByBuyerResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.PostResponseDTO;
+import bootcamp.sprint.grupo02.sprintI.enums.DateOrder;
 import bootcamp.sprint.grupo02.sprintI.exception.BadRequestException;
 import bootcamp.sprint.grupo02.sprintI.model.Post;
 import bootcamp.sprint.grupo02.sprintI.model.Seller;
@@ -38,13 +39,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostResponseDTO> getAllBySellerId(int seller, String order) {
-        if(order.equals("date_asc")) {
+        if(order.equals(DateOrder.DATE_ASC.toString().toLowerCase())) {
             return repository.findBySellerId(seller)
                     .stream()
                     .map(this::convertToPostResponseDTO)
                     .sorted(Comparator.comparing(PostResponseDTO::getDate))
                     .toList();
-        } if(order.equals("date_desc")) {
+        } if(order.equals(DateOrder.DATE_DESC.toString().toLowerCase())) {
             return repository.findBySellerId(seller)
                     .stream()
                     .map(this::convertToPostResponseDTO)
