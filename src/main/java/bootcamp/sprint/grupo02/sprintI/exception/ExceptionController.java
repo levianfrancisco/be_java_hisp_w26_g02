@@ -17,4 +17,10 @@ public class ExceptionController {
                 .body(new MessageResponseDTO(ex.getMessage()));
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<MessageResponseDTO> notFound(BadRequestException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new MessageResponseDTO(ex.getMessage()));
+    }
+
 }
