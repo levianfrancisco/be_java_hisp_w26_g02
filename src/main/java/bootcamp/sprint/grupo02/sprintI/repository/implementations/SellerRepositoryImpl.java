@@ -33,8 +33,7 @@ public class SellerRepositoryImpl implements SellerRepository {
 
     @Override
     public Optional<Seller> findById(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return this.sellers.stream().filter(s -> s.getId() == id).findFirst();
     }
 
     @Override
