@@ -28,7 +28,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<Post> findAll() {
-        return null;
+        return posts;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public void add(Post entity) {
-
+        posts.add(entity);
     }
 
     @Override
