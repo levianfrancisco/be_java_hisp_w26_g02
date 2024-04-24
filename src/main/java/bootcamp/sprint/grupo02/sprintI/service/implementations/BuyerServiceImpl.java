@@ -10,10 +10,13 @@ import org.springframework.stereotype.Service;
 
 import bootcamp.sprint.grupo02.sprintI.dto.response.FollowedListResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.UserResponseDTO;
+import bootcamp.sprint.grupo02.sprintI.enums.AlfabeticOrder;
 import bootcamp.sprint.grupo02.sprintI.repository.BuyerRepository;
 import bootcamp.sprint.grupo02.sprintI.service.BuyerService;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,4 +74,21 @@ public class BuyerServiceImpl implements BuyerService {
         buyer.getFollows().add(seller);
         seller.getFollowers().add(buyer);
     }
+
+    @Override
+    public FollowedListResponseDTO searchBuyerFollows(int buyerId, String order) {
+        FollowedListResponseDTO result = searchBuyerFollows(buyerId);
+        result.setFollowed(new ArrayList<>(result.getFollowed()));
+        this.orderResult(result.getFollowed(), order);
+        return result;
+
+  }
+
+  private void orderResult(List<UserResponseDTO> toOrder, String order){
+        Comparator<UserResponseDTO> comparator = Comparator.comparing(UserResponseDTO::getUserName);
+        if(order.equalsIgnoreCase(AlfabeticOrder.NAME_DESC.toString())) {
+               comparator = comparator.reversed();
+        }
+        toOrder.sort(comparator);
+  }
 }

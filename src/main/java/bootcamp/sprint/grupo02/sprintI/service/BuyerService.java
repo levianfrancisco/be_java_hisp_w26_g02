@@ -10,6 +10,8 @@ public interface BuyerService {
     void followUser(int userId, int userIdToFollow);
 
     FollowedListResponseDTO searchBuyerFollows(int buyerId);
+    FollowedListResponseDTO searchBuyerFollows(int buyerId, String order);
+
 
     List<Seller> getAllSellers(int buyerId);
 
