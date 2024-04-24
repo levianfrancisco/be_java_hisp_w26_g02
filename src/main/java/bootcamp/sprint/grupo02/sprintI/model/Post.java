@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Post {
     private int id;
-    private int userId;
+    private int sellerId;
     private LocalDate date;
     private int category;
     private double price;
