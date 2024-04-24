@@ -23,4 +23,9 @@ public class ExceptionController {
                 .body(new MessageResponseDTO(ex.getMessage()));
     }
 
+    @ExceptionHandler(UnfollowNotAllowedException.class)
+    public ResponseEntity<String> badRequest(UnfollowNotAllowedException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
 }

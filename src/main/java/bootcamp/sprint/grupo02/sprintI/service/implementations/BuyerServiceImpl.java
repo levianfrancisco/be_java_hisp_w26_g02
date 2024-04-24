@@ -1,6 +1,7 @@
 package bootcamp.sprint.grupo02.sprintI.service.implementations;
 
 import bootcamp.sprint.grupo02.sprintI.exception.NotFoundException;
+import bootcamp.sprint.grupo02.sprintI.exception.UnfollowNotAllowedException;
 import bootcamp.sprint.grupo02.sprintI.model.Buyer;
 import bootcamp.sprint.grupo02.sprintI.model.Seller;
 import bootcamp.sprint.grupo02.sprintI.service.SellerService;
@@ -46,6 +47,19 @@ public class BuyerServiceImpl implements BuyerService {
             throw new NotFoundException("Buyer not found");
         }
         return buyer.get().getFollows();
+    }
+
+    @Override
+    public void UnfollowUser(int userId, int userIdToFollow) {
+        Buyer buyer = repository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Buyer not found: " + userId));
+        Seller seller = sellerService.findById(userIdToFollow);
+        if (!buyer.getFollows().contains(seller)) {
+            throw new UnfollowNotAllowedException("Cannot unfollow seller because not followed previously");
+        }
+
+        buyer.getFollows().remove(seller);
+        seller.getFollowers().remove(buyer);
     }
 
     @Override

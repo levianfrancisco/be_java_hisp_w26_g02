@@ -12,4 +12,6 @@ public interface BuyerService {
     FollowedListResponseDTO searchBuyerFollows(int buyerId);
 
     List<Seller> getAllSellers(int buyerId);
+
+    void UnfollowUser(int userId, int userIdToFollow);
 }
