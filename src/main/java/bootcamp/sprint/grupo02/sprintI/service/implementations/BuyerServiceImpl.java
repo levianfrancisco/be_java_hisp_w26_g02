@@ -22,7 +22,7 @@ public class BuyerServiceImpl implements BuyerService {
     public List<Seller> getAllSellers(int buyerId){
         Optional<Buyer> buyer = repository.findById(buyerId);
         if(!buyer.isPresent()){
-            throw new NotFoundException("No se encontró el comprador");
+            throw new NotFoundException("Buyer not found");
         }
         return buyer.get().getFollows();
     }
