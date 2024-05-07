@@ -42,6 +42,18 @@ public class TestGeneratorUtil {
                 .build();
     }
 
+    public static Seller createSellerWithIdAndFollowers(int id) {
+        List<Buyer> followers = new ArrayList<Buyer>();
+        followers.add(createBuyerWithId(2));
+        followers.add(createBuyerWithId(3));
+
+        return Seller.builder()
+                .id(id)
+                .name(String.format("Buyer %d", id))
+                .followers(followers)
+                .build();
+    }
+
     public static List<Seller> createSellers() {
         return List.of(createSellerWithId(1), createSellerWithId(2));
     }

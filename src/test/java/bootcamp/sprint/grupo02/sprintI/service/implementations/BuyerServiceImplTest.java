@@ -53,7 +53,7 @@ public class BuyerServiceImplTest {
            buyerService.searchBuyerFollows(1, "asdasdasd");
         });
     }
-    
+
     @Test
     void getFollowedAsc() {
         int id = 1;
