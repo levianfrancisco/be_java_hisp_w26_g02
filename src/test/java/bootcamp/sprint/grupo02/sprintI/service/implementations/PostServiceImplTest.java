@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -52,7 +51,7 @@ public class PostServiceImplTest {
 
     public static boolean isWithinLastTwoWeeks(LocalDate localDate) {
         LocalDate currentDate = LocalDate.now();
-        LocalDate twoWeeksAgo = currentDate.minus(14, ChronoUnit.DAYS);
+        LocalDate twoWeeksAgo = currentDate.minusDays(14);
         return !localDate.isBefore(twoWeeksAgo) && !localDate.isAfter(currentDate);
     }
 }
