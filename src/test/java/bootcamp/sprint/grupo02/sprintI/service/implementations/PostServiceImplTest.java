@@ -1,12 +1,12 @@
 package bootcamp.sprint.grupo02.sprintI.service.implementations;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import bootcamp.sprint.grupo02.sprintI.exception.BadRequestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,6 +47,22 @@ public class PostServiceImplTest {
 
     void whenPostRepositoryBySeller(int sellerId) {
         when(repository.findBySellerId(sellerId)).thenReturn(TestGeneratorUtil.createPostsBySellerId(sellerId));
+    }
+    @Test
+    void shouldThrowExceptionIfTheOrderDoesNotExist(){
+        String notValidOrder = "ABC";
+
+        assertThrows(BadRequestException.class,()->{
+            underTest.findPostsByBuyer(1,notValidOrder);
+        });
+    }
+
+    @Test
+    void shouldPassIfTheOrderIsValid(){
+        String validString = "date_asc";
+        assertDoesNotThrow(()->{
+            underTest.findPostsByBuyer(1,validString);
+        });
     }
 
     public static boolean isWithinLastTwoWeeks(LocalDate localDate) {
