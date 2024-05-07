@@ -1,5 +1,6 @@
 package bootcamp.sprint.grupo02.sprintI.service.implementations;
 
+import bootcamp.sprint.grupo02.sprintI.exception.BadRequestException;
 import bootcamp.sprint.grupo02.sprintI.exception.NotFoundException;
 import bootcamp.sprint.grupo02.sprintI.model.Seller;
 import bootcamp.sprint.grupo02.sprintI.dto.response.FollowersListResponseDTO;
@@ -75,6 +76,9 @@ public class SellerServiceImpl implements SellerService {
   }
 
   private void orderResult(List<UserResponseDTO> toOrder, String order){
+        if(!AlfabeticOrder.NAME_DESC.toString().equalsIgnoreCase(order) && !AlfabeticOrder.NAME_ASC.toString().equalsIgnoreCase(order))
+            throw new BadRequestException(String.format("El Orden %s no existe.", order));
+            
         Comparator<UserResponseDTO> comparator = Comparator.comparing(UserResponseDTO::getUserName);
         if(order.equalsIgnoreCase(AlfabeticOrder.NAME_DESC.toString())) {
                comparator = comparator.reversed();

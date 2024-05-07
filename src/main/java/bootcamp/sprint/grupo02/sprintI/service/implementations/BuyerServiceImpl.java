@@ -1,5 +1,6 @@
 package bootcamp.sprint.grupo02.sprintI.service.implementations;
 
+import bootcamp.sprint.grupo02.sprintI.exception.BadRequestException;
 import bootcamp.sprint.grupo02.sprintI.exception.NotFoundException;
 import bootcamp.sprint.grupo02.sprintI.exception.UnfollowNotAllowedException;
 import bootcamp.sprint.grupo02.sprintI.model.Buyer;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import bootcamp.sprint.grupo02.sprintI.dto.response.FollowedListResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.UserResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.enums.AlfabeticOrder;
+import bootcamp.sprint.grupo02.sprintI.enums.DateOrder;
 import bootcamp.sprint.grupo02.sprintI.repository.BuyerRepository;
 import bootcamp.sprint.grupo02.sprintI.service.BuyerService;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +87,10 @@ public class BuyerServiceImpl implements BuyerService {
   }
 
   private void orderResult(List<UserResponseDTO> toOrder, String order){
+        if(!AlfabeticOrder.NAME_DESC.toString().equalsIgnoreCase(order) && !AlfabeticOrder.NAME_ASC.toString().equalsIgnoreCase(order))
+            throw new BadRequestException(String.format("El Orden %s no existe.", order));
         Comparator<UserResponseDTO> comparator = Comparator.comparing(UserResponseDTO::getUserName);
+        
         if(order.equalsIgnoreCase(AlfabeticOrder.NAME_DESC.toString())) {
                comparator = comparator.reversed();
         }
