@@ -37,7 +37,7 @@ public class TestGeneratorUtil {
                 .build();
     }
 
-    public static FollowedListResponseDTO createOrderedFollowedListResponseDTO(boolean isAscendent) {
+    public static FollowedListResponseDTO createOrderedFollowedListResponseDTO(boolean isAscending) {
         UserResponseDTO userResponseDTO = UserResponseDTO.builder()
                 .userId(1)
                 .userName("Buyer 1")
@@ -58,7 +58,7 @@ public class TestGeneratorUtil {
                         .build()
         );
 
-        if (!isAscendent) {
+        if (!isAscending) {
             Comparator<UserResponseDTO> comparator = Comparator.comparing(UserResponseDTO::getUserName);
             comparator = comparator.reversed();
             userResponseDTOList.sort(comparator);
