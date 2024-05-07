@@ -6,8 +6,13 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 
+import bootcamp.sprint.grupo02.sprintI.dto.response.PostResponseDTO;
+import bootcamp.sprint.grupo02.sprintI.model.Buyer;
+import bootcamp.sprint.grupo02.sprintI.model.Post;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -55,4 +60,35 @@ public class PostServiceImplTest {
         LocalDate twoWeeksAgo = currentDate.minus(14, ChronoUnit.DAYS);
         return !localDate.isBefore(twoWeeksAgo) && !localDate.isAfter(currentDate);
     }
+
+    private void testFindPostByBuyer_OrderAscOrDesc(String order) {
+        List<Seller> sellers = TestGeneratorUtil.createSellers();
+        when(buyerService.getAllSellers(1)).thenReturn(sellers);
+
+        sellers.forEach(seller -> whenPostRepositoryBySeller(seller.getId()));
+
+        PostListByBuyerResponseDTO result = underTest.findPostsByBuyer(1,order);
+
+        List<PostResponseDTO> postResponseDTOs = result.getPosts();
+
+        Comparator<PostResponseDTO> comparator = Comparator.comparing(PostResponseDTO::getDate);
+        if ("date_desc".equals(order)) {
+            comparator = comparator.reversed();
+        }
+        List<PostResponseDTO> sortedPosts = postResponseDTOs.stream()
+                .sorted(comparator)
+                .toList();
+
+        Assertions.assertEquals(postResponseDTOs, sortedPosts, "Las publicaciones no están ordenadas correctamente por fecha");
+    }
+
+    @Test
+    public void testFindPostByBuyer_OrderAsc() {
+        this.testFindPostByBuyer_OrderAscOrDesc("date_asc");
+    }
+    @Test
+    public void testFindPostByBuyer_OrderDesc() {
+        this.testFindPostByBuyer_OrderAscOrDesc("date_desc");
+    }
+
 }
