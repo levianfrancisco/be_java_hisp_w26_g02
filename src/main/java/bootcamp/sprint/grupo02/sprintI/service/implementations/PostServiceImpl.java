@@ -36,6 +36,9 @@ public class PostServiceImpl implements PostService {
 
     public List<PostResponseDTO> searchAllBySellers(List<Integer> sellersId, String order) {
 
+        if(!DateOrder.DATE_DESC.toString().equalsIgnoreCase(order) && !DateOrder.DATE_ASC.toString().equalsIgnoreCase(order))
+            throw new BadRequestException(String.format("El Orden %s no existe.", order));
+
         Comparator<PostResponseDTO> comparator = Comparator.comparing(PostResponseDTO::getDate);
 
         if(DateOrder.DATE_DESC.toString().equalsIgnoreCase(order)) {
@@ -58,31 +61,6 @@ public class PostServiceImpl implements PostService {
                 .toList();
     }
 
-    @Override
-    public List<PostResponseDTO> getAllBySellerId(int seller, String order) {
-        if(order.equals(DateOrder.DATE_ASC.toString().toLowerCase())) {
-            return repository.findBySellerId(seller)
-                    .stream()
-                    .map(this::convertToPostResponseDTO)
-                    .sorted(Comparator.comparing(PostResponseDTO::getDate))
-                    .toList();
-        } if(order.equals(DateOrder.DATE_DESC.toString().toLowerCase())) {
-            return repository.findBySellerId(seller)
-                    .stream()
-                    .map(this::convertToPostResponseDTO)
-                    .sorted(Comparator.comparing(PostResponseDTO::getDate).reversed())
-                    .toList();
-        }
-        throw new BadRequestException("Invalid order");
-    }
-
-    @Override
-    public List<PostResponseDTO> getBySellerIdLastTwoWeeks(int sellerId, String order) {
-        return getAllBySellerId(sellerId, order)
-                .stream()
-                .filter(p -> p.getDate().isAfter(LocalDate.now().minusDays(14L)))
-                .toList();
-    }
 
     @Override
     public PostListByBuyerResponseDTO findPostsByBuyer(int id, String order) {
