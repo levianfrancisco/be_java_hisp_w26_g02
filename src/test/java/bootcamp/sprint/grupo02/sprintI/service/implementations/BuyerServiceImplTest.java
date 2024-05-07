@@ -133,4 +133,35 @@ public class BuyerServiceImplTest {
         // Act & Assert
         assertThrows(NotFoundException.class, () -> buyerService.UnfollowUser(1, 1));
     }
+
+    @Test
+    @DisplayName("El usuario a seguir existe.")
+    public void testFollowUser_UserExists() {
+        // Arrange
+        Buyer buyer = TestGeneratorUtil.createBuyerWithId(1);
+        Seller seller = TestGeneratorUtil.createSellerWithId(1);
+
+        when(buyerRepository.findById(anyInt())).thenReturn(Optional.ofNullable(buyer));
+        when(sellerRepository.findById(anyInt())).thenReturn(Optional.ofNullable(seller));
+
+        // Act
+        buyerService.followUser(1, 1);
+
+        // Assert
+        assertTrue(buyer.getFollows().contains(seller));
+    }
+
+    @Test
+    @DisplayName("El usuario a seguir no existe.")
+    public void testFollowUser_UserDoesNotExist() {
+        // Arrange
+        int id = 1;
+        when(buyerRepository.findById(id))
+                .thenReturn(Optional.ofNullable(TestGeneratorUtil.createBuyerWithFollowed(id)));
+        when(sellerRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(NotFoundException.class, () -> buyerService.followUser(1, 1));
+    }
+
 }
