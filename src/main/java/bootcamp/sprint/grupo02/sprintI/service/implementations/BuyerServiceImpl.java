@@ -5,6 +5,7 @@ import bootcamp.sprint.grupo02.sprintI.exception.NotFoundException;
 import bootcamp.sprint.grupo02.sprintI.exception.UnfollowNotAllowedException;
 import bootcamp.sprint.grupo02.sprintI.model.Buyer;
 import bootcamp.sprint.grupo02.sprintI.model.Seller;
+import bootcamp.sprint.grupo02.sprintI.repository.SellerRepository;
 import bootcamp.sprint.grupo02.sprintI.service.SellerService;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ import java.util.Optional;
 public class BuyerServiceImpl implements BuyerService {
     
     private final BuyerRepository repository;
-    private final SellerService sellerService;
+    private final SellerRepository sellerRepository;
 
 
     @Override
@@ -58,7 +59,8 @@ public class BuyerServiceImpl implements BuyerService {
     public void UnfollowUser(int userId, int userIdToFollow) {
         Buyer buyer = repository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Buyer not found: " + userId));
-        Seller seller = sellerService.findById(userIdToFollow);
+        Seller seller = sellerRepository.findById(userIdToFollow)
+                .orElseThrow(()-> new NotFoundException("Seller not found: " + userIdToFollow));
         if (!buyer.getFollows().contains(seller)) {
             throw new UnfollowNotAllowedException("Cannot unfollow seller because not followed previously");
         }
@@ -71,8 +73,11 @@ public class BuyerServiceImpl implements BuyerService {
     public void followUser(int userId, int userIdToFollow) {
         Buyer buyer = repository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found: " + userId));
-        Seller seller = sellerService.findById(userIdToFollow);
-
+        Seller seller = sellerRepository.findById(userIdToFollow)
+                .orElseThrow(() -> new NotFoundException("Seller not found: " + userIdToFollow));
+        if (buyer.getFollows().contains(seller)) {
+            throw new BadRequestException("Cannot follow seller because is already followed. ");
+        }
         buyer.getFollows().add(seller);
         seller.getFollowers().add(buyer);
     }

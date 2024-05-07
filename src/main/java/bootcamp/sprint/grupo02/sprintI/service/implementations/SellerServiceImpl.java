@@ -25,12 +25,6 @@ public class SellerServiceImpl implements SellerService {
     
     private final SellerRepository repository;
 
-
-    @Override
-    public Seller findById(int id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Seller not found: " + id));
-    }
     @Override
     public FollowersListResponseDTO getFollowersList(int id) {
         Optional<Seller> result = repository.findById(id);
