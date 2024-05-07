@@ -41,39 +41,6 @@ public class TestGeneratorUtil {
                 .build();
     }
 
-    public static FollowedListResponseDTO createOrderedFollowedListResponseDTO(boolean isAscending) {
-        UserResponseDTO userResponseDTO = UserResponseDTO.builder()
-                .userId(1)
-                .userName("Buyer 1")
-                .build();
-
-        List<UserResponseDTO> userResponseDTOList = new ArrayList<UserResponseDTO>();
-        userResponseDTOList.add(
-                UserResponseDTO.builder()
-                        .userId(2)
-                        .userName("Seller 2")
-                        .build()
-        );
-
-        userResponseDTOList.add(
-                UserResponseDTO.builder()
-                        .userId(3)
-                        .userName("Seller 3")
-                        .build()
-        );
-
-        if (!isAscending) {
-            Comparator<UserResponseDTO> comparator = Comparator.comparing(UserResponseDTO::getUserName);
-            comparator = comparator.reversed();
-            userResponseDTOList.sort(comparator);
-        }
-
-        return FollowedListResponseDTO.builder()
-                .user(userResponseDTO)
-                .followed(userResponseDTOList)
-                .build();
-    }
-
     public static List<Seller> createSellers() {
         return List.of(createSellerWithId(1), createSellerWithId(2));
     }

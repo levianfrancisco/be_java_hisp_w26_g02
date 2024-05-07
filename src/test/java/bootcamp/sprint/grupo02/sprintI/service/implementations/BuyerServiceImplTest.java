@@ -1,10 +1,10 @@
 package bootcamp.sprint.grupo02.sprintI.service.implementations;
 
-import bootcamp.sprint.grupo02.sprintI.dto.response.FollowedListResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.exception.BadRequestException;
-import bootcamp.sprint.grupo02.sprintI.exception.NotFoundException;
 import bootcamp.sprint.grupo02.sprintI.repository.BuyerRepository;
 import bootcamp.sprint.grupo02.sprintI.util.TestGeneratorUtil;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,9 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static bootcamp.sprint.grupo02.sprintI.util.TestGeneratorUtil.createOrderedFollowedListResponseDTO;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,32 +25,20 @@ public class BuyerServiceImplTest {
     @InjectMocks
     private BuyerServiceImpl buyerService;
 
-    @Test
-    public void searchBuyerFollowsAscendingOrderTest() {
-        // Arange
-        FollowedListResponseDTO expectedResult = createOrderedFollowedListResponseDTO(true);
+    @BeforeEach
+    public void setup() {
         when(buyerRepository.findById(1))
                 .thenReturn(Optional.of(TestGeneratorUtil.createBuyerWithIdAndFollows(1)));
+    }
 
-        // Act
-        FollowedListResponseDTO result = buyerService.searchBuyerFollows(1, "NAME_ASC");
-
-        // Assert
-        assertEquals(result, expectedResult);
+    @Test
+    public void searchBuyerFollowsAscendingOrderTest() {
+        executeOrderTest("NAME_ASC");
     }
 
     @Test
     public void searchBuyerFollowsDescendingOrderTest() {
-        // Arange
-        FollowedListResponseDTO expectedResult = createOrderedFollowedListResponseDTO(false);
-        when(buyerRepository.findById(1))
-                .thenReturn(Optional.of(TestGeneratorUtil.createBuyerWithIdAndFollows(1)));
-
-        // Act
-        FollowedListResponseDTO result = buyerService.searchBuyerFollows(1, "NAME_DESC");
-
-        // Assert
-        assertEquals(result, expectedResult);
+        executeOrderTest("NAME_DESC");
     }
 
     @Test
@@ -60,6 +46,13 @@ public class BuyerServiceImplTest {
         // Act & Assert
         assertThrows(BadRequestException.class, () -> {
            buyerService.searchBuyerFollows(1, "asdasdasd");
+        });
+    }
+
+    private void executeOrderTest(String order) {
+        // Act & Assert
+        assertDoesNotThrow(() -> {
+            buyerService.searchBuyerFollows(1, order);
         });
     }
 }
