@@ -10,8 +10,6 @@ import java.util.List;
 
 import bootcamp.sprint.grupo02.sprintI.exception.BadRequestException;
 import bootcamp.sprint.grupo02.sprintI.dto.response.PostResponseDTO;
-import bootcamp.sprint.grupo02.sprintI.model.Buyer;
-import bootcamp.sprint.grupo02.sprintI.model.Post;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
