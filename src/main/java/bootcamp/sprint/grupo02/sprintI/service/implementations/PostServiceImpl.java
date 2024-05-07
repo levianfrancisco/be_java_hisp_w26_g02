@@ -9,11 +9,11 @@ import bootcamp.sprint.grupo02.sprintI.model.Post;
 import bootcamp.sprint.grupo02.sprintI.model.Seller;
 import bootcamp.sprint.grupo02.sprintI.service.BuyerService;
 import bootcamp.sprint.grupo02.sprintI.service.ProductService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import bootcamp.sprint.grupo02.sprintI.util.DateUtil;
 import bootcamp.sprint.grupo02.sprintI.dto.request.PostDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.request.ProductDTO;
 import bootcamp.sprint.grupo02.sprintI.model.Product;
-import bootcamp.sprint.grupo02.sprintI.repository.ProductRepository;
+
 import org.springframework.stereotype.Service;
 
 import bootcamp.sprint.grupo02.sprintI.repository.PostRepository;
@@ -54,7 +54,7 @@ public class PostServiceImpl implements PostService {
     public List<PostResponseDTO> searchBySellersBetween(List<Integer> sellersId, String order, Long period) {
         return  this.searchAllBySellers(sellersId, order)
                 .stream()
-                .filter(p -> p.getDate().isAfter(LocalDate.now().minusDays(period)))
+                .filter(p -> DateUtil.isInLastDays(p.getDate(), period))
                 .toList();
     }
 
