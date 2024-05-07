@@ -38,9 +38,8 @@ public class TestGeneratorUtil {
         LocalDate lastWeek = today.minusWeeks(1);
         LocalDate twoWeeksAgo = today.minusWeeks(2);
         LocalDate threeWeeksAgo = today.minusWeeks(3);
-        LocalDate thisWeek = today;
         LocalDate nextWeek = today.plusWeeks(1);
-        LocalDate[] dates = {today, lastWeek, twoWeeksAgo, threeWeeksAgo, thisWeek, nextWeek};
+        LocalDate[] dates = {today, lastWeek, twoWeeksAgo, threeWeeksAgo, nextWeek};
     
         return Arrays.asList(dates)
         .stream()

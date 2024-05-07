@@ -41,7 +41,7 @@ public class PostServiceImplTest {
         when(buyerService.getAllSellers(1)).thenReturn(sellers);
         sellers.forEach(seller -> whenPostRepositoryBySeller(seller.getId()));
         PostListByBuyerResponseDTO result = underTest.findPostsByBuyer(1, DateOrder.DATE_ASC.name());
-        assertEquals(8 , result.getPosts().size());
+        assertEquals(6 , result.getPosts().size());
         result.getPosts()
             .forEach(post -> assertTrue(isWithinLastTwoWeeks(post.getDate())));
     }
