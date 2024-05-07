@@ -5,6 +5,7 @@ import bootcamp.sprint.grupo02.sprintI.repository.BuyerRepository;
 import bootcamp.sprint.grupo02.sprintI.util.TestGeneratorUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,16 +33,19 @@ public class BuyerServiceImplTest {
     }
 
     @Test
+    @DisplayName("Tipo de ordenamiento ascendente existente.")
     public void searchBuyerFollowsAscendingOrderTest() {
         executeOrderTest("NAME_ASC");
     }
 
     @Test
+    @DisplayName("Tipo de ordenamiento descendente existente.")
     public void searchBuyerFollowsDescendingOrderTest() {
         executeOrderTest("NAME_DESC");
     }
 
     @Test
+    @DisplayName("Tipo de ordenamiento inexistente.")
     public void searchBuyerFollowsNonExistentOrderTest() {
         // Act & Assert
         assertThrows(BadRequestException.class, () -> {
