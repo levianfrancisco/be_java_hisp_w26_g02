@@ -24,7 +24,7 @@ public class PostRepositoryImpl implements PostRepository {
         Product product2 =  new Product(2, "Termo2", "Tipo 2", "Lumilagro", "gris", "Bueno, bonito y barato");
 
         Post post = new Post(1, 1, LocalDate.now(), 1, 100.0, product , 0, false);
-        Post post2 = new Post(2, 1, LocalDate.of(2024, 4, 22), 1, 2000, product2 , 2, false);
+        Post post2 = new Post(2, 1, LocalDate.of(2024, 4, 30), 1, 2000, product2 , 2, false);
         Post post3 = new Post(3, 2, LocalDate.of(2024, 4, 22), 1, 2000, product , 4, false);
 
         posts.add(post);
