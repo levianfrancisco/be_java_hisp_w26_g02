@@ -1,9 +1,11 @@
 package bootcamp.sprint.grupo02.sprintI.service.implementations;
 
 import bootcamp.sprint.grupo02.sprintI.dto.response.FollowersListResponseDTO;
+import bootcamp.sprint.grupo02.sprintI.dto.response.SellerFollowersResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.response.UserResponseDTO;
 import bootcamp.sprint.grupo02.sprintI.exception.BadRequestException;
 import bootcamp.sprint.grupo02.sprintI.model.Buyer;
+import bootcamp.sprint.grupo02.sprintI.model.Seller;
 import bootcamp.sprint.grupo02.sprintI.repository.SellerRepository;
 import bootcamp.sprint.grupo02.sprintI.util.TestGeneratorUtil;
 import org.junit.jupiter.api.Assertions;
@@ -16,11 +18,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 public class SellerServiceImplTest {
@@ -97,5 +101,17 @@ public class SellerServiceImplTest {
         assertDoesNotThrow(() -> {
             sellerService.getFollowersList(1, order);
         });
+    }
+
+    @Test
+    public void calculateFollowersCountTest() {
+        Seller seller = TestGeneratorUtil.createSellerWithId(1);
+        seller.setFollowers(List.of(TestGeneratorUtil.createBuyerWithId(1),
+                TestGeneratorUtil.createBuyerWithId(2)));
+        when(sellerRepository.findById(seller.getId())).thenReturn(Optional.of(seller));
+
+        SellerFollowersResponseDTO sellerFollowersResponseDTO = this.sellerService.calculateFollowersCount(seller.getId());
+
+        Assertions.assertEquals(2, sellerFollowersResponseDTO.getFollowersCount());
     }
 }
