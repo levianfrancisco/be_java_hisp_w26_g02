@@ -20,6 +20,7 @@ public class TestGeneratorUtil {
         return Seller.builder()
                 .id(id)
                 .name(String.format("Seller %d", id))
+                .followers(new ArrayList<>())
                 .build();
     }
 
@@ -27,6 +28,7 @@ public class TestGeneratorUtil {
         return Buyer.builder()
                 .id(id)
                 .name(String.format("Buyer %d", id))
+                .follows(new ArrayList<>())
                 .build();
     }
 
