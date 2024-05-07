@@ -13,4 +13,5 @@ public interface PostService {
     List<PostResponseDTO> getBySellerIdLastTwoWeeks(int sellerId, String order);
     PostListByBuyerResponseDTO findPostsByBuyer(int id, String order);
      MessageResponseDTO createPost(PostDTO dto);
+     List<PostResponseDTO> searchBySellersBetween(List<Integer> sellersIs, String order, Long period);
 }

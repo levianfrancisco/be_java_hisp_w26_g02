@@ -9,11 +9,11 @@ import bootcamp.sprint.grupo02.sprintI.model.Post;
 import bootcamp.sprint.grupo02.sprintI.model.Seller;
 import bootcamp.sprint.grupo02.sprintI.service.BuyerService;
 import bootcamp.sprint.grupo02.sprintI.service.ProductService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import bootcamp.sprint.grupo02.sprintI.util.DateUtil;
 import bootcamp.sprint.grupo02.sprintI.dto.request.PostDTO;
 import bootcamp.sprint.grupo02.sprintI.dto.request.ProductDTO;
 import bootcamp.sprint.grupo02.sprintI.model.Product;
-import bootcamp.sprint.grupo02.sprintI.repository.ProductRepository;
+
 import org.springframework.stereotype.Service;
 
 import bootcamp.sprint.grupo02.sprintI.repository.PostRepository;
@@ -21,11 +21,9 @@ import bootcamp.sprint.grupo02.sprintI.service.PostService;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -35,7 +33,30 @@ public class PostServiceImpl implements PostService {
     private final PostRepository repository;
     private final BuyerService buyerService;
     private final ProductService productService;
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    public List<PostResponseDTO> searchAllBySellers(List<Integer> sellersId, String order) {
+
+        Comparator<PostResponseDTO> comparator = Comparator.comparing(PostResponseDTO::getDate);
+
+        if(DateOrder.DATE_DESC.toString().equalsIgnoreCase(order)) {
+            comparator = comparator.reversed();
+        }
+
+        return  sellersId.stream()
+                .map(repository::findBySellerId)
+                .flatMap(List::stream)
+                .map(this::convertToPostResponseDTO)
+                .sorted(comparator)
+                .toList();
+    }
+
+    @Override
+    public List<PostResponseDTO> searchBySellersBetween(List<Integer> sellersId, String order, Long period) {
+        return  this.searchAllBySellers(sellersId, order)
+                .stream()
+                .filter(p -> DateUtil.isInLastDays(p.getDate(), period))
+                .toList();
+    }
 
     @Override
     public List<PostResponseDTO> getAllBySellerId(int seller, String order) {
@@ -65,15 +86,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostListByBuyerResponseDTO findPostsByBuyer(int id, String order) {
-        List<Seller> sellers = buyerService.getAllSellers(id);
-        PostListByBuyerResponseDTO postListByBuyerResponseDTO = new PostListByBuyerResponseDTO();
-        postListByBuyerResponseDTO.setUserId(id);
-        List<PostResponseDTO> postList = new ArrayList<>();
-        for(Seller seller : sellers){
-            postList.addAll(getBySellerIdLastTwoWeeks(seller.getId(), order));
-            postListByBuyerResponseDTO.setPosts(postList);
-        }
-        return postListByBuyerResponseDTO;
+        List<Integer> sellers = buyerService.getAllSellers(id)
+                .stream()
+                .map(Seller::getId)
+                .toList();
+
+        return PostListByBuyerResponseDTO.builder()
+                .userId(id)
+                .posts(searchBySellersBetween(sellers, order, 14L))
+                .build();
     }
 
     private PostResponseDTO convertToPostResponseDTO(Post post){
@@ -86,10 +107,6 @@ public class PostServiceImpl implements PostService {
         postResponseDTO.setUserId(post.getSellerId());
         return postResponseDTO;
     }
-
-
-    private final ProductRepository productRepository;
-
 
 
     @Override
@@ -109,10 +126,8 @@ public class PostServiceImpl implements PostService {
         Product product = new Product(proDto.getProductId(),proDto.getProductName(),proDto.getType(),proDto.getColor(),
                 proDto.getNotes(),proDto.getBrand());
 
-        Post post = new Post(repository.findAll().size() + 1,dto.getUserId(),dateFormater(dto.getDate()),dto.getCategory(),dto.getPrice(),
+        return new Post(repository.findAll().size() + 1,dto.getUserId(),dateFormater(dto.getDate()),dto.getCategory(),dto.getPrice(),
                 product, 1,false);
-
-        return post;
 
     }
     private LocalDate dateFormater(String str){
