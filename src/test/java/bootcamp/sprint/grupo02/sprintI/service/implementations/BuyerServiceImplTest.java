@@ -1,6 +1,7 @@
 package bootcamp.sprint.grupo02.sprintI.service.implementations;
 
 import bootcamp.sprint.grupo02.sprintI.dto.response.FollowedListResponseDTO;
+import bootcamp.sprint.grupo02.sprintI.exception.BadRequestException;
 import bootcamp.sprint.grupo02.sprintI.exception.NotFoundException;
 import bootcamp.sprint.grupo02.sprintI.repository.BuyerRepository;
 import bootcamp.sprint.grupo02.sprintI.util.TestGeneratorUtil;
@@ -57,7 +58,7 @@ public class BuyerServiceImplTest {
     @Test
     public void searchBuyerFollowsNonExistentOrderTest() {
         // Act & Assert
-        assertThrows(NotFoundException.class, () -> {
+        assertThrows(BadRequestException.class, () -> {
            buyerService.searchBuyerFollows(1, "asdasdasd");
         });
     }
