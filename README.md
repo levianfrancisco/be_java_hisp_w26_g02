@@ -395,3 +395,75 @@
 - Programar en ingles.
 - Desarrollar orientado a las interfaces.
 - Usar inyección por constructor. 
+
+# Requerimientos técnicos funcionales Test (Punto A)
+
+## User Stories
+
+SocialMeli contaba anteriormente con las siguientes User Stories y requerimientos técnicos:
+
+- US-0001: Poder realizar la acción de “Follow” (seguir) a un determinado vendedor
+- US-0002: Obtener el resultado de la cantidad de usuarios que siguen a un determinado vendedor
+- US-0003: Obtener un listado de todos los usuarios que siguen a un determinado vendedor (¿Quién me sigue?)
+- US-0004: Obtener un listado de todos los vendedores a los cuales sigue un determinado usuario (¿A quién sigo?)
+- US-0005: Dar de alta una nueva publicación.
+- US-0006: Obtener un listado de las publicaciones realizadas por los vendedores que un usuario sigue en las últimas dos semanas (para esto tener en cuenta ordenamiento por fecha, publicaciones más recientes primero).
+- US-0007: Poder realizar la acción de “Unfollow” (dejar de seguir) a un determinado vendedor.
+- US-0008: Ordenamiento alfabético ascendente y descendente.
+- US-0009: Ordenamiento por fecha ascendente y descendente.
+
+## Especificaciones técnicas de Desafío Anterior: Esp. de Req. técnicos funcionales - Sprint Nº 1 - Spring
+
+### Datos/Parámetros
+
+| Dato/Parámetro | Tipo    | Longitud | Descripción                                                      |
+|----------------|---------|----------|------------------------------------------------------------------|
+| user_id        | Integer |          | Número que identifica al usuario actual                          |
+| user_id_to_follow | Integer |       | Número que identifica al usuario a seguir                        |
+| user_name      | String  | 15       | Nombre de usuario asociado al user_id                            |
+| followers_count| Integer |          | Cantidad de seguidores                                           |
+| id_post        | Integer |          | Número identificatorio de cada una de las publicaciones           |
+| date           | LocalDate|          | Fecha de la publicación en formato dd-MM-yyyy                     |
+| product_id     | Integer |          | Número identificatorio de cada uno de los productos asociados a una publicación |
+| product_name   | String  | 40       | Cadena de caracteres que representa el nombre de un producto     |
+| type           | String  | 15       | Cadena de caracteres que representa el tipo de un producto       |
+| brand          | String  | 25       | Cadena de caracteres que representa la marca de un producto      |
+| color          | String  | 15       | Cadena de caracteres que representa el color de un producto      |
+| notes          | String  | 80       | Cadena de caracteres para colocar notas u observaciones de un producto |
+| category       | Integer |          | Identificador que sirve para conocer la categoría a la que pertenece un producto. Por ejemplo: 100: Sillas, 58: Teclados |
+| price          | Double  | 10.000.000 (Max) | Precio del producto                                         |
+| user_id_to_unfollow | Integer |     | Número que identifica al usuario a dejar de seguir                |
+| order          | String  |          | Establece el ordenamiento. Puede poseer los valores: name_asc, name_desc, date_asc, date_desc |
+
+### Resumen de Datos de entrada (todas las US):
+
+#### Validaciones en campos (Todas las US):
+| Dato/Parámetro | ¿Obligatorio? | Validación                                                                                                        | Mensaje de error                                                                                                                                                                                                                   |
+|----------------|----------------|-------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| user_id        | Si             | Que el campo no esté vacío. Mayor 0                                                                               | El id no puede estar vacío. El id debe ser mayor a cero                                                                                                                                                                         |
+| date           | SI             | Que el campo no esté vacío. La fecha no puede estar vacía.                                                       | La fecha no puede estar vacía.                                                                                                                                                                                                   |
+| product_id     | SI             | Que el campo no esté vacío. Mayor 0                                                                              | La id no puede estar vacía. El id debe ser mayor a cero                                                                                                                                                                          |
+| product_name   | SI             | Que el campo no esté vacío. Longitud máxima de 40 caracteres. Que no posea caracteres especiales (%,&,$,etc). | El campo no puede estar vacío. La longitud no puede superar los 40 caracteres. El campo no puede poseer caracteres especiales.                                                                                                 |
+| type           | SI             | Que el campo no esté vacío. Longitud máxima de 15 caracteres. Que no posea caracteres especiales (%,&,$,etc).  | El campo no puede estar vacío. La longitud no puede superar los 15 caracteres. El campo no puede poseer caracteres especiales.                                                                                                  |
+| brand          | SI             | Que el campo no esté vacío. Longitud máxima de 25 caracteres. Que no posea caracteres especiales (%,&,$,etc).  | La longitud no puede superar los 25 caracteres. El campo no puede estar vacío. El campo no puede poseer caracteres especiales.                                                                                                  |
+| color          | SI             | Que el campo no esté vacío. Longitud máxima de 15 caracteres. Que no posea caracteres especiales (%,&,$,etc).  | El campo no puede estar vacío. La longitud no puede superar los 15 caracteres. El campo no puede poseer caracteres especiales.                                                                                                  |
+| notes          | NO             | Longitud máxima de 80 caracteres. Que no posea caracteres especiales (%,&,$,etc), permite espacios.           | La longitud no puede superar los 80 caracteres. El campo no puede poseer caracteres especiales.                                                                                                                                  |
+| category       | SI             | Que el campo no esté vacío.                                                                                      | El campo no puede estar vacío.                                                                                                                                                                                                  |
+| price          | SI             | Que el campo no esté vacío. El precio máximo puede ser 10.000.000.                                              | El campo no puede estar vacío. El precio máximo por producto es de 10.000.000                                                                                                                                                  |
+
+*Nota: Tener en cuenta que para la devolución de los mensajes de error es recomendable utilizar los status code correspondientes.*
+
+## Tests Unitarios:
+
+A continuación se solicita una serie de test unitarios a llevar a cabo; sin embargo, en caso de que se considere necesario implementar otros, esto es totalmente viable.
+
+| Test  | Situaciones de entrada                                                                                                   | Comportamiento Esperado                                                                 |
+|-------|---------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| T-0001| Verificar que el usuario a seguir exista. (US-0001)                                                                      | - Se cumple: Permite continuar con normalidad. <br> - No se cumple: Notifica la no existencia mediante una excepción. |
+| T-0002| Verificar que el usuario a dejar de seguir exista. (US-0007)                                                              | - Se cumple: Permite continuar con normalidad. <br> - No se cumple: Notifica la no existencia mediante una excepción. |
+| T-0003| Verificar que el tipo de ordenamiento alfabético exista (US-0008)                                                         | - Se cumple: Permite continuar con normalidad. <br> - No se cumple: Notifica la no existencia mediante una excepción. |
+| T-0004| Verificar el correcto ordenamiento ascendente y descendente por nombre. (US-0008)                                          | Devuelve la lista ordenada según el criterio solicitado                                   |
+| T-0005| Verificar que el tipo de ordenamiento por fecha exista (US-0009)                                                           | - Se cumple: Permite continuar con normalidad. <br> - No se cumple: Notifica la no existencia mediante una excepción. |
+| T-0006| Verificar el correcto ordenamiento ascendente y descendente por fecha. (US-0009)                                          | Verificar el correcto ordenamiento ascendente y descendente por fecha. (US-0009)         |
+| T-0007| Verificar que la cantidad de seguidores de un determinado usuario sea correcta. (US-0002)                                 | Devuelve el cálculo correcto del total de la cantidad de seguidores que posee un usuario. |
+| T-0008| Verificar que la consulta de publicaciones realizadas en las últimas dos semanas de un determinado vendedor sean efectivamente de las últimas dos semanas. (US-0006) | Devuelve únicamente los datos de las publicaciones que tengan fecha de publicación dentro de las últimas dos semanas a partir del día de la fecha. |
